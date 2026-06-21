@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { Toast } from "./Toast";
 
 type ToastType = "success" | "error";
@@ -16,18 +17,21 @@ type ToastContextModel = {
 const ToastContext = createContext<ToastContextModel | null>(null);
 
 type ToastProviderProps = {
-  children?: JSX.Element | JSX.Element[];
+  children?: ReactNode;
 };
 
 export function ToastProvider({ children }: ToastProviderProps): JSX.Element {
   const [toasts, setToasts] = useState<ToastModel[]>([]);
+  const toastIdRef = useRef(1);
 
   const addToast = (toast: { message: string; type?: ToastType }): void => {
     const nextToast: ToastModel = {
-      id: Date.now(),
+      id: toastIdRef.current,
       message: toast.message,
       type: toast.type ?? "success",
     };
+
+    toastIdRef.current += 1;
 
     setToasts((prev) => [...prev, nextToast]);
   };
