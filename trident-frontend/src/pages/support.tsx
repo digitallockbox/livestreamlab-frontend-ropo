@@ -27,10 +27,11 @@ type SupportBootstrap = {
 
 export default function SupportPage(): JSX.Element {
   const { addToast } = useToast();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [category, setCategory] = useState("billing");
   const [priority, setPriority] = useState("normal");
-  const [subject, setSubject] = useState("");
-  const [details, setDetails] = useState("");
+  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data, isLoading, error, reload } = useApiData<SupportBootstrap>(
@@ -110,9 +111,18 @@ export default function SupportPage(): JSX.Element {
   }): Promise<void> => {
     event.preventDefault();
 
-    if (!subject.trim() || !details.trim()) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!name.trim() || !email.trim() || !message.trim()) {
       addToast({
-        message: "Please complete subject and details before submitting.",
+        message: "Please complete name, email, and message before submitting.",
+        type: "error",
+      });
+      return;
+    }
+
+    if (!emailPattern.test(email.trim())) {
+      addToast({
+        message: "Please provide a valid email address.",
         type: "error",
       });
       return;
@@ -121,8 +131,9 @@ export default function SupportPage(): JSX.Element {
     setIsSubmitting(true);
     try {
       await Promise.resolve();
-      setSubject("");
-      setDetails("");
+      setName("");
+      setEmail("");
+      setMessage("");
       addToast({ message: "Support ticket submitted successfully." });
     } catch {
       addToast({ message: "Failed to submit support ticket.", type: "error" });
@@ -166,11 +177,18 @@ export default function SupportPage(): JSX.Element {
                 void handleSubmit(event)
               }
             >
-              <Input
-                value={subject}
-                onChange={setSubject}
-                placeholder="Subject"
-              />
+              <div className="support-form-grid">
+                <Input
+                  value={name}
+                  onChange={setName}
+                  placeholder="Your name"
+                />
+                <Input
+                  value={email}
+                  onChange={setEmail}
+                  placeholder="you@creator.com"
+                />
+              </div>
               <div className="support-form-grid">
                 <Select
                   value={category}
@@ -186,9 +204,9 @@ export default function SupportPage(): JSX.Element {
                 />
               </div>
               <Textarea
-                value={details}
-                onChange={setDetails}
-                placeholder="Describe the issue and include expected behavior."
+                value={message}
+                onChange={setMessage}
+                placeholder="Add additional context, steps, and impact details."
               />
               <div className="support-upload">
                 Attachment UI placeholder: logs, screenshots, clips.

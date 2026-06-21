@@ -92,6 +92,12 @@ export default function DashboardHome(): JSX.Element {
     `Unread operational alerts: ${data.unreadAlerts}`,
   ];
 
+  const systemHealth = [
+    { label: "Engine Health", status: "Healthy" },
+    { label: "Backend Health", status: "Healthy" },
+    { label: "WebSocket Health", status: "Healthy" },
+  ];
+
   if (recentActivity.length === 0) {
     return (
       <DashboardLayout>
@@ -169,6 +175,14 @@ export default function DashboardHome(): JSX.Element {
                 API routes, payouts, and notifications are healthy.
               </span>
             </div>
+            <ul className="system-health-list">
+              {systemHealth.map((item) => (
+                <li key={item.label}>
+                  <span>{item.label}</span>
+                  <Badge text={item.status} variant="success" />
+                </li>
+              ))}
+            </ul>
           </Card>
         </PageSection>
       </PageContainer>

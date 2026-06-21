@@ -81,6 +81,12 @@ export default function HelpPage(): JSX.Element {
   }
 
   const normalized = query.trim().toLowerCase();
+  const troubleshootingCategories = [
+    "Streaming",
+    "Earnings",
+    "Content",
+    "Integrations",
+  ];
   const filteredFaqs = data.faqs.filter((faq) => {
     if (!normalized) {
       return true;
@@ -160,7 +166,20 @@ export default function HelpPage(): JSX.Element {
             </ul>
           </Card>
           <Card title="Need More Help" className="metric-card">
-            Open Support to submit a creator ticket with severity and category.
+            <p className="help-support-copy">
+              Open Support to submit a creator ticket with severity and
+              category.
+            </p>
+            <a href="/support" className="quick-action-link">
+              Contact Support
+            </a>
+          </Card>
+          <Card title="Troubleshooting Categories" className="metric-card">
+            <ul className="activity-list">
+              {troubleshootingCategories.map((category) => (
+                <li key={category}>{category}</li>
+              ))}
+            </ul>
           </Card>
         </PageSection>
       </PageContainer>

@@ -171,6 +171,25 @@
   color: var(--color-muted);
 }
 
+.system-health-list {
+  margin: 0.75rem 0 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.system-health-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.625rem;
+  background: #0c131d;
+}
+
 .faq-list {
   display: grid;
   gap: var(--space-sm);
@@ -210,6 +229,11 @@
   padding: 0.625rem 0.75rem;
   color: var(--color-muted);
   font-size: 0.82rem;
+}
+
+.help-support-copy {
+  margin: 0 0 0.75rem 0;
+  color: var(--color-muted);
 }
 
 .page-grid {
