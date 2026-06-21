@@ -1,4 +1,4 @@
-import { Sidebar } from "../components/Sidebar";
+import { Sidebar } from "../Sidebar";
 
 type DashboardLayoutProps = {
   children?: JSX.Element | JSX.Element[];

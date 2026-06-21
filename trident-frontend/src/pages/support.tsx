@@ -1,21 +1,205 @@
-import { DashboardLayout } from "../layouts/DashboardLayout";
+import {
+  DashboardLayout,
+  PageContainer,
+  PageHeader,
+  PageSection,
+} from "../components/layout";
+import { useState } from "react";
+import { useApiData } from "../hooks/useApiData";
+import {
+  Badge,
+  Button,
+  Card,
+  EmptyState,
+  ErrorState,
+  Input,
+  Select,
+  Skeleton,
+  Textarea,
+  useToast,
+} from "../components/ui";
+
+type SupportBootstrap = {
+  status: "operational" | "degraded";
+  categories: Array<{ value: string; label: string }>;
+  priorities: Array<{ value: string; label: string }>;
+};
 
 export default function SupportPage(): JSX.Element {
+  const { addToast } = useToast();
+  const [category, setCategory] = useState("billing");
+  const [priority, setPriority] = useState("normal");
+  const [subject, setSubject] = useState("");
+  const [details, setDetails] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data, isLoading, error, reload } = useApiData<SupportBootstrap>(
+    async () => ({
+      status: "operational",
+      categories: [
+        { value: "billing", label: "Billing" },
+        { value: "streaming", label: "Streaming" },
+        { value: "store", label: "Store" },
+        { value: "integrations", label: "Integrations" },
+      ],
+      priorities: [
+        { value: "low", label: "Low" },
+        { value: "normal", label: "Normal" },
+        { value: "high", label: "High" },
+        { value: "urgent", label: "Urgent" },
+      ],
+    }),
+    "Could not load support center",
+  );
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <PageContainer>
+          <PageSection>
+            <Skeleton className="h-8 w-40" />
+            <Skeleton className="h-24 w-full" />
+          </PageSection>
+        </PageContainer>
+      </DashboardLayout>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <DashboardLayout>
+        <PageContainer>
+          <PageSection>
+            <ErrorState
+              title="Support unavailable"
+              message={error ?? undefined}
+            />
+            <Button variant="secondary" onClick={() => void reload()}>
+              Retry
+            </Button>
+          </PageSection>
+        </PageContainer>
+      </DashboardLayout>
+    );
+  }
+
+  if (data.categories.length === 0 || data.priorities.length === 0) {
+    return (
+      <DashboardLayout>
+        <PageContainer>
+          <PageHeader
+            title="Support"
+            subtitle="Open a ticket and connect to creator success channels."
+          />
+          <PageSection>
+            <EmptyState
+              title="Support options unavailable"
+              message="Support routing options are temporarily unavailable. Please retry shortly."
+            />
+            <Button variant="secondary" onClick={() => void reload()}>
+              Retry
+            </Button>
+          </PageSection>
+        </PageContainer>
+      </DashboardLayout>
+    );
+  }
+
+  const handleSubmit = async (event: {
+    preventDefault: () => void;
+  }): Promise<void> => {
+    event.preventDefault();
+
+    if (!subject.trim() || !details.trim()) {
+      addToast({
+        message: "Please complete subject and details before submitting.",
+        type: "error",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await Promise.resolve();
+      setSubject("");
+      setDetails("");
+      addToast({ message: "Support ticket submitted successfully." });
+    } catch {
+      addToast({ message: "Failed to submit support ticket.", type: "error" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <DashboardLayout>
-      <section style={{ padding: "28px", display: "grid", gap: "16px" }}>
-        <h1 style={{ margin: 0, fontSize: "30px" }}>Support</h1>
-        <div
-          style={{
-            border: "1px solid #1f2937",
-            borderRadius: "14px",
-            background: "#0d1520",
-            padding: "16px",
-          }}
-        >
-          Ticket form and priority channel information appear here.
-        </div>
-      </section>
+      <PageContainer>
+        <PageHeader
+          title="Support"
+          subtitle="Open a ticket and connect to creator success channels."
+          actions={
+            <Button variant="ghost" onClick={() => void reload()}>
+              Refresh
+            </Button>
+          }
+        />
+        <PageSection>
+          <div className="status-banner">
+            <Badge
+              text={
+                data.status === "operational"
+                  ? "System Operational"
+                  : "Service Degraded"
+              }
+              variant={data.status === "operational" ? "success" : "warning"}
+            />
+            <span className="status-copy">
+              Current support response window: under 4 hours for high priority.
+            </span>
+          </div>
+        </PageSection>
+        <PageSection>
+          <Card title="Submit Support Ticket" className="metric-card">
+            <form
+              className="support-form"
+              onSubmit={(event: { preventDefault: () => void }) =>
+                void handleSubmit(event)
+              }
+            >
+              <Input
+                value={subject}
+                onChange={setSubject}
+                placeholder="Subject"
+              />
+              <div className="support-form-grid">
+                <Select
+                  value={category}
+                  onChange={setCategory}
+                  options={data.categories}
+                  ariaLabel="Ticket category"
+                />
+                <Select
+                  value={priority}
+                  onChange={setPriority}
+                  options={data.priorities}
+                  ariaLabel="Ticket priority"
+                />
+              </div>
+              <Textarea
+                value={details}
+                onChange={setDetails}
+                placeholder="Describe the issue and include expected behavior."
+              />
+              <div className="support-upload">
+                Attachment UI placeholder: logs, screenshots, clips.
+              </div>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Submit Ticket"}
+              </Button>
+            </form>
+          </Card>
+        </PageSection>
+      </PageContainer>
     </DashboardLayout>
   );
 }

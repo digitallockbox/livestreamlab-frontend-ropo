@@ -2,10 +2,11 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "composite": false,
+    "moduleResolution": "Bundler",
     "jsx": "preserve",
+    "allowImportingTsExtensions": true,
     "allowJs": true,
     "noEmit": true,
-    "moduleResolution": "Node",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },

@@ -1,0 +1,21 @@
+.section {
+  padding: var(--space-xl);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.wide {
+  gap: 1.125rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+}

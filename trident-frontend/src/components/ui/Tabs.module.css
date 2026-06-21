@@ -1,0 +1,25 @@
+.tabs {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.list {
+  display: flex;
+  gap: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+}
+
+.trigger {
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+}
+
+.triggerActive {
+  color: var(--color-text);
+  background: #111827;
+}

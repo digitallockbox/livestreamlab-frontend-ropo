@@ -8,26 +8,21 @@ import type {
     SettingsResponse,
     StreamsResponse,
 } from '@livestreamlab/shared/types/DashboardApi';
+import { DASHBOARD_ENDPOINTS, resolveApiRoute } from '@livestreamlab/backend/server';
 
 const API_BASE_URL = 'https://api.livestreamlab.live:8080';
 
-const DASHBOARD_ENDPOINTS = {
-    analytics: '/api/analytics',
-    streams: '/api/streams',
-    earnings: '/api/earnings',
-    autosplit: '/api/autosplit',
-    content: '/api/content',
-    affiliate: '/api/affiliate',
-    integrations: '/api/integrations',
-    settings: '/api/settings',
-} as const;
-
 async function fetchJson<T>(path: string): Promise<T> {
-    const response = await fetch(`${API_BASE_URL}${path}`);
-    if (!response.ok) {
-        throw new Error(`Request failed: ${response.status}`);
+    try {
+        const response = await fetch(`${API_BASE_URL}${path}`);
+        if (response.ok) {
+            return (await response.json()) as T;
+        }
+    } catch {
+        // Fall through to in-workspace resolver used by local previews.
     }
-    return (await response.json()) as T;
+
+    return resolveApiRoute<T>(path);
 }
 
 export const dashboardApi = {

@@ -1,42 +1,87 @@
-import { DashboardLayout } from "../layouts/DashboardLayout";
+import {
+  DashboardLayout,
+  PageContainer,
+  PageHeader,
+  PageSection,
+} from "../components/layout";
+import { useApiData } from "../hooks/useApiData";
+import { dashboardApi } from "../utils/dashboardApi";
+import { Button, ErrorState, Skeleton, Table } from "../components/ui";
+
+type AllocationRow = {
+  wallet: string;
+  percentage: number;
+};
 
 export default function AutoSplitPage(): JSX.Element {
+  const { data, isLoading, error, reload } = useApiData(
+    dashboardApi.getAutoSplitRules,
+    "Could not load autosplit rules",
+  );
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <PageContainer>
+          <PageSection>
+            <Skeleton className="h-8 w-40" />
+            <Skeleton className="h-24 w-full" />
+          </PageSection>
+        </PageContainer>
+      </DashboardLayout>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <DashboardLayout>
+        <PageContainer>
+          <PageSection>
+            <ErrorState
+              title="Autosplit unavailable"
+              message={error ?? undefined}
+            />
+            <Button variant="secondary" onClick={() => void reload()}>
+              Retry
+            </Button>
+          </PageSection>
+        </PageContainer>
+      </DashboardLayout>
+    );
+  }
+
+  const firstRule = data.rules[0];
+  const allocations: AllocationRow[] = (firstRule?.allocations ?? []).map(
+    (entry) => ({
+      wallet: entry.wallet,
+      percentage: entry.percentage,
+    }),
+  );
+
   return (
     <DashboardLayout>
-      <section style={{ padding: "28px", display: "grid", gap: "16px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <h1 style={{ margin: 0, fontSize: "30px" }}>AutoSplit Rules</h1>
-          <button
-            style={{
-              border: 0,
-              borderRadius: "10px",
-              padding: "10px 14px",
-              background: "#3b82f6",
-              color: "#eff6ff",
-              fontWeight: 700,
-            }}
-          >
-            New Rule
-          </button>
-        </div>
-        <div
-          style={{
-            border: "1px solid #1f2937",
-            borderRadius: "14px",
-            background: "#0d1520",
-            padding: "16px",
-          }}
-        >
-          Rule list, split preview, and editor modal mount point.
-        </div>
-      </section>
+      <PageContainer>
+        <PageHeader
+          title="AutoSplit Rules"
+          actions={
+            <div className="page-header-actions">
+              <Button variant="primary">New Rule</Button>
+              <Button variant="ghost" onClick={() => void reload()}>
+                Refresh
+              </Button>
+            </div>
+          }
+        />
+        <PageSection>
+          <Table
+            columns={[
+              { header: "Wallet", key: "wallet" },
+              { header: "Split %", key: "percentage" },
+            ]}
+            rows={allocations}
+          />
+        </PageSection>
+      </PageContainer>
     </DashboardLayout>
   );
 }
