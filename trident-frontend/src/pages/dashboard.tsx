@@ -7,6 +7,7 @@ import {
 import { useEffect } from "react";
 import { useApiData } from "../hooks/useApiData";
 import { dashboardApi } from "../utils/dashboardApi";
+import { logger } from "../utils/logger";
 import {
   Badge,
   Button,
@@ -57,18 +58,30 @@ export default function DashboardHome(): JSX.Element {
 
       if (cmdKey && event.key === "s") {
         event.preventDefault();
+        logger.info("Keyboard shortcut triggered: Streams", {
+          shortcut: "Cmd+S",
+        });
         window.location.href = "/streams";
       }
       if (cmdKey && event.key === "u") {
         event.preventDefault();
+        logger.info("Keyboard shortcut triggered: Content", {
+          shortcut: "Cmd+U",
+        });
         window.location.href = "/content";
       }
       if (cmdKey && event.key === "e") {
         event.preventDefault();
+        logger.info("Keyboard shortcut triggered: Earnings", {
+          shortcut: "Cmd+E",
+        });
         window.location.href = "/earnings";
       }
       if (cmdKey && event.key === "r") {
         event.preventDefault();
+        logger.info("Keyboard shortcut triggered: Refresh", {
+          shortcut: "Cmd+R",
+        });
         void reload();
       }
     };

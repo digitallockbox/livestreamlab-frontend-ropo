@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useToast } from "../components/ui/ToastProvider";
+import { logger } from "../utils/logger";
 
 type ApiDataState<T> = {
     data: T | null;
@@ -20,12 +21,25 @@ export function useApiData<T>(
     const load = async (): Promise<void> => {
         setIsLoading(true);
         setError(null);
+        const startTime = performance.now();
         try {
             const response = await loader();
+            const duration = performance.now() - startTime;
             setData(response);
-        } catch {
+            logger.info("API data loaded successfully", {
+                page: window.location.pathname,
+                duration,
+            });
+        } catch (err) {
+            const duration = performance.now() - startTime;
             setError(failureMessage);
             addToast({ message: failureMessage, type: "error" });
+            logger.error("API data load failed", {
+                page: window.location.pathname,
+                duration,
+                errorMessage: failureMessage,
+                error: err instanceof Error ? err.message : String(err),
+            });
         } finally {
             setIsLoading(false);
         }
