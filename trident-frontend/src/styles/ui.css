@@ -832,6 +832,34 @@
   font-size: 0.76rem;
 }
 
+.integrations-incident-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.62rem;
+}
+
+.integrations-incident-list li {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #0a1320;
+  padding: 0.6rem 0.7rem;
+  display: grid;
+  gap: 0.22rem;
+}
+
+.integrations-incident-list p {
+  margin: 0;
+  color: #dbe4f2;
+  font-size: 0.82rem;
+}
+
+.integrations-incident-list span {
+  color: #94a3b8;
+  font-size: 0.74rem;
+}
+
 .affiliate-generated-url {
   margin: 0.65rem 0 0 0;
   border: 1px solid var(--color-border);

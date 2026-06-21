@@ -226,6 +226,34 @@ export type IntegrationsResponse = {
         key: 'obs' | 'twitch' | 'youtube' | 'discord' | 'webhook';
         isConnected: boolean;
         updatedAt?: string;
+        health: 'healthy' | 'degraded' | 'offline';
+        latencyMs?: number;
+        rateLimitRemaining?: number;
+        syncMode: 'realtime' | 'polling' | 'manual';
+    }>;
+    syncJobs: Array<{
+        id: string;
+        provider: 'obs' | 'twitch' | 'youtube' | 'discord' | 'webhook';
+        status: 'running' | 'queued' | 'succeeded' | 'failed';
+        startedAt: string;
+        completedAt?: string;
+        recordsProcessed: number;
+    }>;
+    webhooks: Array<{
+        id: string;
+        target: string;
+        event: 'order.created' | 'stream.started' | 'payout.sent' | 'identity.updated';
+        status: 'active' | 'paused' | 'error';
+        lastDeliveryAt?: string;
+        failureRate: number;
+    }>;
+    incidents: Array<{
+        id: string;
+        provider: 'obs' | 'twitch' | 'youtube' | 'discord' | 'webhook';
+        severity: 'low' | 'medium' | 'high';
+        summary: string;
+        openedAt: string;
+        resolvedAt?: string;
     }>;
 };
 export type SettingsResponse = {
