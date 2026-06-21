@@ -462,6 +462,10 @@
   .overlay-editor-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .autosplit-editor-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1024px) {
@@ -690,6 +694,52 @@
 .overlay-goals-list li {
   display: grid;
   gap: 0.42rem;
+}
+
+.autosplit-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.autosplit-history-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.62rem;
+}
+
+.autosplit-history-list li {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #0a1320;
+  padding: 0.6rem 0.7rem;
+  display: grid;
+  gap: 0.22rem;
+}
+
+.autosplit-history-list p {
+  margin: 0;
+  color: #dbe4f2;
+  font-size: 0.82rem;
+}
+
+.autosplit-history-list span {
+  color: #94a3b8;
+  font-size: 0.74rem;
+}
+
+.autosplit-sim-header {
+  margin: 0;
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.autosplit-sim-subheader {
+  margin: 0.25rem 0 0.65rem 0;
+  color: #93c5fd;
+  font-size: 0.8rem;
 }
 
 @keyframes rise-in {

@@ -122,11 +122,35 @@ export type AutoSplitResponse = {
         id: string;
         name: string;
         isEnabled: boolean;
+        trigger: {
+            type: 'stream_duration_hours' | 'affiliate_sale' | 'default';
+            operator: 'gte' | 'eq';
+            value: number;
+            description: string;
+        };
         allocations: Array<{
             wallet: string;
             percentage: number;
+            party: string;
         }>;
+        updatedAt: string;
     }>;
+    ruleHistory: Array<{
+        id: string;
+        ruleId: string;
+        action: 'created' | 'updated' | 'disabled';
+        at: string;
+        summary: string;
+    }>;
+    simulation: {
+        sampleRevenue: number;
+        appliedRuleId: string;
+        result: Array<{
+            party: string;
+            amount: number;
+            percentage: number;
+        }>;
+    };
 };
 
 export type ContentResponse = {
