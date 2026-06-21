@@ -251,5 +251,42 @@ export type SettingsResponse = {
     security: {
         twoFactorEnabled: boolean;
         apiKeysEnabled: boolean;
+        hardwareKeyEnabled: boolean;
+        walletSignatureRequired: boolean;
+    };
+    identityTrust: {
+        kycStatus: 'unverified' | 'pending' | 'verified' | 'rejected';
+        trustTier: 'starter' | 'trusted' | 'institutional';
+        submittedAt?: string;
+        reviewedAt?: string;
+        nextAction: string;
+        riskScore: number;
+        linkedWallets: Array<{
+            address: string;
+            network: 'solana' | 'ethereum';
+            verified: boolean;
+            verifiedAt?: string;
+        }>;
+        documents: Array<{
+            id: string;
+            type: 'passport' | 'national_id' | 'proof_of_address' | 'selfie';
+            status: 'uploaded' | 'under_review' | 'approved' | 'rejected';
+            uploadedAt: string;
+            note?: string;
+        }>;
+        trustSignals: Array<{
+            id: string;
+            signal: string;
+            scoreImpact: number;
+            status: 'positive' | 'neutral' | 'negative';
+        }>;
+        sessionEvents: Array<{
+            id: string;
+            event: string;
+            location: string;
+            ip: string;
+            risk: 'low' | 'medium' | 'high';
+            at: string;
+        }>;
     };
 };

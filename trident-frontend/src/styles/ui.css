@@ -807,6 +807,31 @@
   font-size: 0.74rem;
 }
 
+.identity-inline-list {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.45rem;
+  color: #dbe4f2;
+  font-size: 0.84rem;
+}
+
+.identity-next-action {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #0a1320;
+  color: #dbeafe;
+  padding: 0.58rem 0.66rem;
+  font-size: 0.82rem;
+}
+
+.identity-meta-line {
+  margin: 0.45rem 0 0 0;
+  color: #93c5fd;
+  font-size: 0.76rem;
+}
+
 .affiliate-generated-url {
   margin: 0.65rem 0 0 0;
   border: 1px solid var(--color-border);
