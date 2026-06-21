@@ -4,7 +4,34 @@ export type AnalyticsOverview = {
     uniqueViewers: number;
     watchTimeMinutes: number;
     conversionRate: number;
+    ctr: number;
+    rpm: number;
     revenue: number;
+};
+export type RetentionPoint = {
+    minute: number;
+    retention: number;
+};
+export type TrafficSourceStat = {
+    source: 'direct' | 'search' | 'social' | 'referral' | 'partner';
+    visitors: number;
+    ctr: number;
+    revenue: number;
+};
+export type GeographyStat = {
+    countryCode: string;
+    country: string;
+    viewers: number;
+    revenue: number;
+};
+export type HeatmapCell = {
+    day: 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+    hour: number;
+    score: number;
+};
+export type EarningsPoint = {
+    label: string;
+    earnings: number;
 };
 export type AnalyticsResponse = {
     generatedAt: string;
@@ -16,6 +43,11 @@ export type AnalyticsResponse = {
         views: number;
         revenue: number;
     }>;
+    retentionCurve: RetentionPoint[];
+    trafficSources: TrafficSourceStat[];
+    viewerGeography: GeographyStat[];
+    streamPerformanceHeatmap: HeatmapCell[];
+    earningsOverTime: EarningsPoint[];
 };
 export type StreamsResponse = {
     streams: Array<{
