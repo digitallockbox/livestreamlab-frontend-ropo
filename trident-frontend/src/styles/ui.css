@@ -458,6 +458,10 @@
   .dashboard-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .overlay-editor-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1024px) {
@@ -582,6 +586,110 @@
 .analytics-bar-label {
   color: #94a3b8;
   font-size: 0.74rem;
+}
+
+.overlay-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.overlay-field-label {
+  margin: 0 0 0.35rem 0;
+  color: #93c5fd;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.overlay-token-value {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.58rem 0.66rem;
+  background: #0a1320;
+  color: #e2e8f0;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.78rem;
+}
+
+.overlay-url-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.overlay-url-list li {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #0a1320;
+  padding: 0.58rem 0.65rem;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.overlay-url-list span {
+  color: #93c5fd;
+  font-size: 0.76rem;
+}
+
+.overlay-url-list code {
+  color: #dbeafe;
+  font-size: 0.72rem;
+  word-break: break-all;
+  font-family: Consolas, Monaco, monospace;
+}
+
+.overlay-preview {
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  background: #08121f;
+}
+
+.overlay-preview-neon {
+  border-color: rgba(34, 211, 238, 0.35);
+  background: #08121f;
+}
+
+.overlay-preview-midnight {
+  border-color: rgba(96, 165, 250, 0.35);
+  background: #060b16;
+}
+
+.overlay-preview-sunset {
+  border-color: rgba(251, 146, 60, 0.35);
+  background: #1a0f0b;
+}
+
+.overlay-preview-title {
+  margin: 0;
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.overlay-preview ul {
+  margin: 0.6rem 0 0 0;
+  padding-left: 1rem;
+  color: #dbe4f2;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.83rem;
+}
+
+.overlay-goals-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.overlay-goals-list li {
+  display: grid;
+  gap: 0.42rem;
 }
 
 @keyframes rise-in {

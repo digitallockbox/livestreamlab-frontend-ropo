@@ -58,6 +58,42 @@ export type StreamsResponse = {
         startedAt?: string;
         viewersPeak?: number;
     }>;
+    overlays: {
+        overlayToken: string;
+        channel: string;
+        themePresets: Array<{
+            key: 'neon' | 'midnight' | 'sunset';
+            name: string;
+            accent: string;
+            background: string;
+        }>;
+        browserSourceUrls: {
+            alertBox: string;
+            chatOverlay: string;
+            eventTicker: string;
+            streamGoal: string;
+        };
+        widgets: Array<{
+            id: string;
+            type: 'alert_box' | 'chat_overlay' | 'event_ticker' | 'stream_goal';
+            title: string;
+            enabled: boolean;
+            sampleText: string;
+        }>;
+        goals: Array<{
+            id: string;
+            name: string;
+            current: number;
+            target: number;
+        }>;
+        recentEvents: Array<{
+            id: string;
+            type: 'follow' | 'donation' | 'sub';
+            viewer: string;
+            amount?: number;
+            at: string;
+        }>;
+    };
 };
 export type EarningsResponse = {
     currency: CurrencyCode;
