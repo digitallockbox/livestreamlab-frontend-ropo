@@ -16,6 +16,10 @@
   SettingsResponse,
   StreamsResponse,
 } from '@livestreamlab/shared/types/DashboardApi';
+import {
+  API_ENDPOINTS,
+  PHANTOM_ENDPOINTS,
+} from '@livestreamlab/shared/constants/endpoints';
 import { getPhantomVerifyResponse } from './routes/auth.routes';
 import { getAnalyticsResponse } from './routes/analytics.routes';
 import { getContentResponse } from './routes/content.routes';
@@ -31,24 +35,30 @@ import {
   getPhantomConnectResponse,
   getPhantomLinkResponse,
 } from './routes/wallet.routes';
+import {
+  getOverlayConfigResponse,
+  getOverlayEventsResponse,
+  type OverlayConfigRequest,
+  type OverlayConfigResponse,
+  type OverlayEventsRequest,
+  type OverlayEventsResponse,
+  type OverlayThemeUpdateRequest,
+  type OverlayTokenRequest,
+  type OverlayTokenResponse,
+  revokeOverlayTokenResponse,
+  rotateOverlayTokenResponse,
+  saveOverlayThemeResponse,
+} from './routes/overlay.routes';
 
-export const DASHBOARD_ENDPOINTS = {
-  analytics: '/api/analytics',
-  streams: '/api/streams',
-  earnings: '/api/earnings',
-  autosplit: '/api/autosplit',
-  content: '/api/content',
-  affiliate: '/api/affiliate',
-  integrations: '/api/integrations',
-  settings: '/api/settings',
+const OVERLAY_ENDPOINTS = {
+  config: '/overlay/config',
+  theme: '/overlay/theme',
+  events: '/overlay/events',
+  rotateToken: '/overlay/token/rotate',
+  revokeToken: '/overlay/token/revoke',
 } as const;
 
-export const PHANTOM_ENDPOINTS = {
-  connect: '/wallet/phantom/connect',
-  verify: '/wallet/phantom/verify',
-  link: '/wallet/phantom/link',
-  checkout: '/wallet/phantom/checkout',
-} as const;
+export const DASHBOARD_ENDPOINTS = API_ENDPOINTS;
 
 type DashboardResponseMap = {
   [DASHBOARD_ENDPOINTS.analytics]: AnalyticsResponse;
@@ -75,6 +85,22 @@ type PhantomResponseMap = {
   [PHANTOM_ENDPOINTS.checkout]: PhantomCheckoutResponse;
 };
 
+type OverlayPayloadMap = {
+  [OVERLAY_ENDPOINTS.config]: OverlayConfigRequest;
+  [OVERLAY_ENDPOINTS.theme]: OverlayThemeUpdateRequest;
+  [OVERLAY_ENDPOINTS.events]: OverlayEventsRequest;
+  [OVERLAY_ENDPOINTS.rotateToken]: OverlayTokenRequest;
+  [OVERLAY_ENDPOINTS.revokeToken]: OverlayTokenRequest;
+};
+
+type OverlayResponseMap = {
+  [OVERLAY_ENDPOINTS.config]: OverlayConfigResponse;
+  [OVERLAY_ENDPOINTS.theme]: OverlayConfigResponse;
+  [OVERLAY_ENDPOINTS.events]: OverlayEventsResponse;
+  [OVERLAY_ENDPOINTS.rotateToken]: OverlayTokenResponse;
+  [OVERLAY_ENDPOINTS.revokeToken]: OverlayTokenResponse;
+};
+
 const dashboardResolvers: {
   [Path in keyof DashboardResponseMap]: () => Promise<DashboardResponseMap[Path]>;
 } = {
@@ -99,6 +125,18 @@ const phantomResolvers: {
   [PHANTOM_ENDPOINTS.checkout]: getPhantomCheckoutResponse,
 };
 
+const overlayResolvers: {
+  [Path in keyof OverlayResponseMap]: (
+    payload?: OverlayPayloadMap[Path],
+  ) => Promise<OverlayResponseMap[Path]>;
+} = {
+  [OVERLAY_ENDPOINTS.config]: getOverlayConfigResponse,
+  [OVERLAY_ENDPOINTS.theme]: saveOverlayThemeResponse,
+  [OVERLAY_ENDPOINTS.events]: getOverlayEventsResponse,
+  [OVERLAY_ENDPOINTS.rotateToken]: rotateOverlayTokenResponse,
+  [OVERLAY_ENDPOINTS.revokeToken]: revokeOverlayTokenResponse,
+};
+
 export const resolveApiRoute = async <T>(path: string, payload?: unknown): Promise<T> => {
   const dashboardResolver = (dashboardResolvers as Record<string, () => Promise<unknown>>)[path];
   if (dashboardResolver) {
@@ -109,15 +147,25 @@ export const resolveApiRoute = async <T>(path: string, payload?: unknown): Promi
     phantomResolvers as Record<string, (request?: unknown) => Promise<unknown>>
   )[path];
 
-  if (!phantomResolver) {
-    throw new Error(`Unknown API route: ${path}`);
+  if (phantomResolver) {
+    return (await phantomResolver(payload)) as T;
   }
 
-  return (await phantomResolver(payload)) as T;
+  const overlayResolver = (
+    overlayResolvers as Record<string, (request?: unknown) => Promise<unknown>>
+  )[path];
+
+  if (overlayResolver) {
+    return (await overlayResolver(payload)) as T;
+  }
+
+  throw new Error(`Unknown API route: ${path}`);
 };
 
 export const startServer = (): string => {
   const endpointCount =
-    Object.keys(dashboardResolvers).length + Object.keys(phantomResolvers).length;
+    Object.keys(dashboardResolvers).length +
+    Object.keys(phantomResolvers).length +
+    Object.keys(overlayResolvers).length;
   return `livestreamlab.live backend routes ready (${endpointCount} endpoints)`;
 };

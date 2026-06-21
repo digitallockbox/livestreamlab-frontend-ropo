@@ -22,3 +22,18 @@ export const API_ENDPOINTS = {
     settings: '/api/settings',
 } as const;
 
+export const PHANTOM_ENDPOINTS = {
+    connect: '/wallet/phantom/connect',
+    verify: '/wallet/phantom/verify',
+    link: '/wallet/phantom/link',
+    checkout: '/wallet/phantom/checkout',
+} as const;
+
+export const OVERLAY_ENDPOINTS = {
+    config: '/overlay/config',
+    theme: '/overlay/theme',
+    events: '/overlay/events',
+    rotateToken: '/overlay/token/rotate',
+    revokeToken: '/overlay/token/revoke',
+} as const;
+

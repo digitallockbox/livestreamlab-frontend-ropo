@@ -5,6 +5,13 @@ import type {
     ContentResponse,
     EarningsResponse,
     IntegrationsResponse,
+    OverlayConfigRequest,
+    OverlayConfigResponse,
+    OverlayEventsRequest,
+    OverlayEventsResponse,
+    OverlayThemeUpdateRequest,
+    OverlayTokenRequest,
+    OverlayTokenResponse,
     PhantomCheckoutRequest,
     PhantomCheckoutResponse,
     PhantomConnectRequest,
@@ -17,10 +24,11 @@ import type {
     StreamsResponse,
 } from '@livestreamlab/shared/types/DashboardApi';
 import {
-    DASHBOARD_ENDPOINTS,
+    API_ENDPOINTS,
+    OVERLAY_ENDPOINTS,
     PHANTOM_ENDPOINTS,
-    resolveApiRoute,
-} from '@livestreamlab/backend/server';
+} from '@livestreamlab/shared/constants/endpoints';
+import { resolveApiRoute } from '@livestreamlab/backend/server';
 
 const API_BASE_URL = 'https://api.livestreamlab.live:8080';
 
@@ -39,21 +47,21 @@ async function fetchJson<T>(path: string, requestInit?: RequestInit, payload?: u
 
 export const dashboardApi = {
     getAnalytics: (): Promise<AnalyticsResponse> =>
-        fetchJson<AnalyticsResponse>(DASHBOARD_ENDPOINTS.analytics),
+        fetchJson<AnalyticsResponse>(API_ENDPOINTS.analytics),
     getStreams: (): Promise<StreamsResponse> =>
-        fetchJson<StreamsResponse>(DASHBOARD_ENDPOINTS.streams),
+        fetchJson<StreamsResponse>(API_ENDPOINTS.streams),
     getEarnings: (): Promise<EarningsResponse> =>
-        fetchJson<EarningsResponse>(DASHBOARD_ENDPOINTS.earnings),
+        fetchJson<EarningsResponse>(API_ENDPOINTS.earnings),
     getAutoSplitRules: (): Promise<AutoSplitResponse> =>
-        fetchJson<AutoSplitResponse>(DASHBOARD_ENDPOINTS.autosplit),
+        fetchJson<AutoSplitResponse>(API_ENDPOINTS.autosplit),
     getContent: (): Promise<ContentResponse> =>
-        fetchJson<ContentResponse>(DASHBOARD_ENDPOINTS.content),
+        fetchJson<ContentResponse>(API_ENDPOINTS.content),
     getAffiliate: (): Promise<AffiliateResponse> =>
-        fetchJson<AffiliateResponse>(DASHBOARD_ENDPOINTS.affiliate),
+        fetchJson<AffiliateResponse>(API_ENDPOINTS.affiliate),
     getIntegrations: (): Promise<IntegrationsResponse> =>
-        fetchJson<IntegrationsResponse>(DASHBOARD_ENDPOINTS.integrations),
+        fetchJson<IntegrationsResponse>(API_ENDPOINTS.integrations),
     getSettings: (): Promise<SettingsResponse> =>
-        fetchJson<SettingsResponse>(DASHBOARD_ENDPOINTS.settings),
+        fetchJson<SettingsResponse>(API_ENDPOINTS.settings),
     phantomConnect: (
         payload: PhantomConnectRequest,
     ): Promise<PhantomConnectResponse> =>
@@ -91,6 +99,66 @@ export const dashboardApi = {
     ): Promise<PhantomCheckoutResponse> =>
         fetchJson<PhantomCheckoutResponse>(
             PHANTOM_ENDPOINTS.checkout,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    getOverlayConfig: (
+        payload: OverlayConfigRequest,
+    ): Promise<OverlayConfigResponse> =>
+        fetchJson<OverlayConfigResponse>(
+            OVERLAY_ENDPOINTS.config,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    saveOverlayTheme: (
+        payload: OverlayThemeUpdateRequest,
+    ): Promise<OverlayConfigResponse> =>
+        fetchJson<OverlayConfigResponse>(
+            OVERLAY_ENDPOINTS.theme,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    getOverlayEvents: (
+        payload: OverlayEventsRequest,
+    ): Promise<OverlayEventsResponse> =>
+        fetchJson<OverlayEventsResponse>(
+            OVERLAY_ENDPOINTS.events,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    rotateOverlayToken: (
+        payload: OverlayTokenRequest,
+    ): Promise<OverlayTokenResponse> =>
+        fetchJson<OverlayTokenResponse>(
+            OVERLAY_ENDPOINTS.rotateToken,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    revokeOverlayToken: (
+        payload: OverlayTokenRequest,
+    ): Promise<OverlayTokenResponse> =>
+        fetchJson<OverlayTokenResponse>(
+            OVERLAY_ENDPOINTS.revokeToken,
             {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },

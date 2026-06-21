@@ -1,7 +1,9 @@
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Home" },
   { href: "/analytics", label: "Analytics" },
-  { href: "/streams", label: "My Streams" },
+  { href: "/streams", label: "Go Live" },
+  { href: "/streams", label: "Stream Health" },
+  { href: "/streams", label: "Overlays" },
   { href: "/earnings", label: "Earnings & Payouts" },
   { href: "/autosplit", label: "AutoSplit Rules" },
   { href: "/content", label: "Content Manager" },

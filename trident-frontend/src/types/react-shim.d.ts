@@ -12,6 +12,7 @@ declare module "react" {
     export function useState<T>(initial: T): [T, (value: T | ((prev: T) => T)) => void];
     export function useRef<T>(initial: T): MutableRefObject<T>;
     export function useEffect(effect: () => void | (() => void), deps?: unknown[]): void;
+    export function useMemo<T>(factory: () => T, deps?: unknown[]): T;
     export function useContext<T>(ctx: Context<T>): T;
     export function createContext<T>(defaultValue: T): Context<T>;
 

@@ -433,7 +433,16 @@
 }
 
 .live-indicator-dot {
-  display: inline-block;\n  width: 8px;\n  height: 8px;\n  border-radius: 50%;\n  background: currentColor;\n}\n\n.live-indicator-dot.pulse {\n  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n}
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.live-indicator-dot.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
 .loading-overlay {
   position: fixed;
@@ -609,6 +618,31 @@
   background: linear-gradient(90deg, #22d3ee, #22c55e);
 }
 
+.analytics-progress-meter {
+  width: 100%;
+  height: 0.5rem;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  background: #0a1320;
+  overflow: hidden;
+}
+
+.analytics-progress-meter::-webkit-progress-bar {
+  background: #0a1320;
+  border-radius: 999px;
+}
+
+.analytics-progress-meter::-webkit-progress-value {
+  border-radius: 999px;
+  background: linear-gradient(90deg, #22d3ee, #22c55e);
+}
+
+.analytics-progress-meter::-moz-progress-bar {
+  border-radius: 999px;
+  background: linear-gradient(90deg, #22d3ee, #22c55e);
+}
+
 .analytics-bars {
   display: flex;
   align-items: flex-end;
@@ -639,6 +673,25 @@
 .analytics-bar-label {
   color: #94a3b8;
   font-size: 0.74rem;
+}
+
+.analytics-bar-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.analytics-bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 72px) minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.analytics-bar-meter {
+  height: 0.7rem;
 }
 
 .overlay-editor-grid {
@@ -743,6 +796,49 @@
 .overlay-goals-list li {
   display: grid;
   gap: 0.42rem;
+}
+
+.overlay-editor-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.overlay-runtime-status {
+  margin: 0.35rem 0 0 0;
+  color: #93c5fd;
+  font-size: 0.78rem;
+}
+
+.overlay-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.overlay-nav-links a {
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #0a1320;
+  color: #e2e8f0;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+}
+
+.overlay-preview-frame {
+  width: 100%;
+  min-height: 320px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #04080d;
+}
+
+.overlay-preview-page {
+  min-height: 100vh;
+  padding: 0.75rem;
+  background: #03070d;
 }
 
 .autosplit-editor-grid {

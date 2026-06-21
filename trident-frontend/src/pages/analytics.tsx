@@ -160,14 +160,12 @@ export default function AnalyticsPage(): JSX.Element {
                   <span className="analytics-retention-label">
                     {point.minute}m
                   </span>
-                  <div className="analytics-progress-track" aria-hidden="true">
-                    <span
-                      className="analytics-progress-fill"
-                      style={{
-                        width: `${Math.max(0, Math.min(point.retention, 100))}%`,
-                      }}
-                    />
-                  </div>
+                  <progress
+                    className="analytics-progress-meter"
+                    value={Math.max(0, Math.min(point.retention, 100))}
+                    max={100}
+                    aria-label={`Retention at ${point.minute} minutes`}
+                  />
                   <span className="analytics-retention-value">
                     {point.retention}%
                   </span>
@@ -217,23 +215,35 @@ export default function AnalyticsPage(): JSX.Element {
         <PageSection>
           <PageGrid>
             <Card title="Earnings Over Time">
-              <div
-                className="analytics-bars"
+              <ul
+                className="analytics-bar-list"
                 aria-label="Earnings over time chart"
               >
                 {data.earningsOverTime.map((point) => (
-                  <div key={point.label} className="analytics-bar-item">
-                    <span
-                      className="analytics-bar"
-                      style={{
-                        height: `${Math.max(18, (point.earnings / Math.max(data.overview.revenue, 1)) * 160)}px`,
-                      }}
-                      title={`${point.label}: $${point.earnings.toFixed(2)}`}
-                    />
+                  <li key={point.label} className="analytics-bar-row">
                     <span className="analytics-bar-label">{point.label}</span>
-                  </div>
+                    <progress
+                      className="analytics-progress-meter analytics-bar-meter"
+                      value={Math.max(
+                        0,
+                        Math.min(
+                          100,
+                          Math.round(
+                            (point.earnings /
+                              Math.max(data.overview.revenue, 1)) *
+                              100,
+                          ),
+                        ),
+                      )}
+                      max={100}
+                      aria-label={`${point.label} earnings share`}
+                    />
+                    <span className="analytics-retention-value">
+                      ${point.earnings.toFixed(2)}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Card>
             <Card title="Stream Performance Heatmap">
               <ul className="analytics-heatmap-list">
@@ -241,15 +251,12 @@ export default function AnalyticsPage(): JSX.Element {
                   <li key={`${cell.day}-${cell.hour}`}>
                     <span>{cell.day}</span>
                     <span>{cell.hour}:00</span>
-                    <div
-                      className="analytics-progress-track"
-                      aria-hidden="true"
-                    >
-                      <span
-                        className="analytics-progress-fill"
-                        style={{ width: `${cell.score}%` }}
-                      />
-                    </div>
+                    <progress
+                      className="analytics-progress-meter"
+                      value={Math.max(0, Math.min(cell.score, 100))}
+                      max={100}
+                      aria-label={`${cell.day} ${cell.hour}:00 performance score`}
+                    />
                     <span>{cell.score}</span>
                   </li>
                 ))}

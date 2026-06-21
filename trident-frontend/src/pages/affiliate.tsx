@@ -168,23 +168,31 @@ export default function AffiliatePage(): JSX.Element {
               </div>
             </Card>
             <Card title="Conversion Trend">
-              <div
-                className="analytics-bars"
+              <ul
+                className="analytics-bar-list"
                 aria-label="Affiliate conversion trend"
               >
                 {data.conversionTrend.map((point) => (
-                  <div key={point.label} className="analytics-bar-item">
-                    <span
-                      className="analytics-bar"
-                      style={{
-                        height: `${Math.max(18, (point.conversions / 16) * 160)}px`,
-                      }}
-                      title={`${point.label}: ${point.conversions} conversions`}
-                    />
+                  <li key={point.label} className="analytics-bar-row">
                     <span className="analytics-bar-label">{point.label}</span>
-                  </div>
+                    <progress
+                      className="analytics-progress-meter analytics-bar-meter"
+                      value={Math.max(
+                        0,
+                        Math.min(
+                          100,
+                          Math.round((point.conversions / 16) * 100),
+                        ),
+                      )}
+                      max={100}
+                      aria-label={`${point.label} conversions`}
+                    />
+                    <span className="analytics-retention-value">
+                      {point.conversions}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Card>
           </div>
         </PageSection>

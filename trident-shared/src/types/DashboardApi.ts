@@ -373,3 +373,62 @@ export type PhantomCheckoutResponse = {
     receiptId: string;
     confirmedAt: string;
 };
+
+export type OverlayConfigRequest = {
+    creatorId: string;
+};
+
+export type OverlayConfigResponse = {
+    creatorId: string;
+    channel: string;
+    token: string;
+    tokenStatus: 'active' | 'revoked' | 'expired';
+    themeKey: 'neon' | 'midnight' | 'sunset';
+    themeVariables: Record<string, string>;
+    animationClass: 'anim-soft' | 'anim-sharp' | 'anim-none';
+    layoutPreset: 'compact' | 'balanced' | 'cinematic';
+    soundPack: 'none' | 'classic' | 'pulse';
+    updatedAt: string;
+};
+
+export type OverlayThemeUpdateRequest = {
+    creatorId: string;
+    themeKey: 'neon' | 'midnight' | 'sunset';
+};
+
+export type OverlayEventsRequest = {
+    creatorId: string;
+    token: string;
+    sinceSequence?: number;
+    connectionMeta?: {
+        ip?: string;
+        userAgent?: string;
+    };
+};
+
+export type OverlayEvent = {
+    id: string;
+    sequence: number;
+    type: 'alert' | 'chat' | 'ticker' | 'goal';
+    message: string;
+    createdAt: string;
+};
+
+export type OverlayEventsResponse = {
+    channel: string;
+    connected: boolean;
+    events: OverlayEvent[];
+    nextSequence: number;
+};
+
+export type OverlayTokenRequest = {
+    creatorId: string;
+};
+
+export type OverlayTokenResponse = {
+    creatorId: string;
+    token: string;
+    status: 'active' | 'revoked';
+    rotatedAt?: string;
+    revokedAt?: string;
+};
