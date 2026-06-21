@@ -6,7 +6,16 @@ import {
 } from "../components/layout";
 import { useApiData } from "../hooks/useApiData";
 import { dashboardApi } from "../utils/dashboardApi";
-import { Button, ErrorState, Skeleton, Table } from "../components/ui";
+import { useState } from "react";
+import {
+  Button,
+  Card,
+  ErrorState,
+  Input,
+  Select,
+  Skeleton,
+  Table,
+} from "../components/ui";
 
 type AffiliateRow = {
   productName: string;
@@ -20,6 +29,8 @@ export default function AffiliatePage(): JSX.Element {
     dashboardApi.getAffiliate,
     "Could not load affiliate metrics",
   );
+  const [selectedProductId, setSelectedProductId] = useState("product-001");
+  const [campaign, setCampaign] = useState("creator-launch");
 
   if (isLoading) {
     return (
@@ -59,11 +70,33 @@ export default function AffiliatePage(): JSX.Element {
     earnings: link.earnings,
   }));
 
+  const selectedProduct =
+    data.catalog.find((product) => product.id === selectedProductId) ??
+    data.catalog[0];
+
+  const generatedUrl = `${data.generator.baseUrl}/${selectedProduct?.name
+    .toLowerCase()
+    .replace(
+      /\s+/g,
+      "-",
+    )}?campaign=${encodeURIComponent(campaign || data.generator.defaultCampaign)}`;
+
+  const totalEarnings = data.links.reduce(
+    (sum, link) => sum + link.earnings,
+    0,
+  );
+  const totalClicks = data.links.reduce((sum, link) => sum + link.clicks, 0);
+  const totalConversions = data.links.reduce(
+    (sum, link) => sum + link.conversions,
+    0,
+  );
+
   return (
     <DashboardLayout>
       <PageContainer>
         <PageHeader
           title="Affiliate Hub"
+          subtitle="Marketplace + conversion analytics + link generation"
           actions={
             <Button variant="ghost" onClick={() => void reload()}>
               Refresh
@@ -71,15 +104,125 @@ export default function AffiliatePage(): JSX.Element {
           }
         />
         <PageSection>
-          <Table
-            columns={[
-              { header: "Product", key: "productName" },
-              { header: "Clicks", key: "clicks" },
-              { header: "Conversions", key: "conversions" },
-              { header: "Earnings", key: "earnings" },
-            ]}
-            rows={rows}
-          />
+          <div className="metric-strip">
+            <article className="metric-tile">
+              <p className="metric-tile-label">Total Clicks</p>
+              <p className="metric-tile-value">{totalClicks}</p>
+            </article>
+            <article className="metric-tile">
+              <p className="metric-tile-label">Total Conversions</p>
+              <p className="metric-tile-value">{totalConversions}</p>
+            </article>
+            <article className="metric-tile">
+              <p className="metric-tile-label">Affiliate Earnings</p>
+              <p className="metric-tile-value">${totalEarnings.toFixed(2)}</p>
+            </article>
+          </div>
+        </PageSection>
+        <PageSection>
+          <Card title="Affiliate Link Generator">
+            <div className="affiliate-generator-grid">
+              <div>
+                <p className="overlay-field-label">Product</p>
+                <Select
+                  ariaLabel="Select affiliate product"
+                  value={selectedProduct?.id}
+                  onChange={setSelectedProductId}
+                  options={data.catalog.map((product) => ({
+                    value: product.id,
+                    label: `${product.name} ($${product.price})`,
+                  }))}
+                />
+              </div>
+              <div>
+                <p className="overlay-field-label">Campaign</p>
+                <Input
+                  ariaLabel="Campaign name"
+                  value={campaign}
+                  onChange={setCampaign}
+                  placeholder={data.generator.defaultCampaign}
+                />
+              </div>
+            </div>
+            <p className="affiliate-generated-url">{generatedUrl}</p>
+          </Card>
+        </PageSection>
+        <PageSection>
+          <div className="page-grid">
+            <Card title="Product Catalog">
+              <div className="surface-table-wrap">
+                <Table
+                  columns={[
+                    { header: "Product", key: "name" },
+                    { header: "Category", key: "category" },
+                    { header: "Price", key: "price" },
+                    { header: "Commission", key: "commissionRate" },
+                  ]}
+                  rows={data.catalog.map((product) => ({
+                    name: product.name,
+                    category: product.category,
+                    price: `$${product.price.toFixed(2)}`,
+                    commissionRate: `${(product.commissionRate * 100).toFixed(0)}%`,
+                  }))}
+                />
+              </div>
+            </Card>
+            <Card title="Conversion Trend">
+              <div
+                className="analytics-bars"
+                aria-label="Affiliate conversion trend"
+              >
+                {data.conversionTrend.map((point) => (
+                  <div key={point.label} className="analytics-bar-item">
+                    <span
+                      className="analytics-bar"
+                      style={{
+                        height: `${Math.max(18, (point.conversions / 16) * 160)}px`,
+                      }}
+                      title={`${point.label}: ${point.conversions} conversions`}
+                    />
+                    <span className="analytics-bar-label">{point.label}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </PageSection>
+        <PageSection>
+          <Card title="Top Performing Products">
+            <div className="surface-table-wrap">
+              <Table
+                columns={[
+                  { header: "Product", key: "productName" },
+                  { header: "Conversion Rate", key: "conversionRate" },
+                  { header: "Earnings", key: "earnings" },
+                ]}
+                rows={data.topProducts.map((product) => ({
+                  productName: product.productName,
+                  conversionRate: `${product.conversionRate.toFixed(2)}%`,
+                  earnings: `$${product.earnings.toFixed(2)}`,
+                }))}
+              />
+            </div>
+          </Card>
+        </PageSection>
+        <PageSection>
+          <Card title="Affiliate Links">
+            <div className="surface-table-wrap">
+              <Table
+                columns={[
+                  { header: "Product", key: "productName" },
+                  { header: "Clicks", key: "clicks" },
+                  { header: "Conversions", key: "conversions" },
+                  { header: "Earnings", key: "earnings" },
+                ]}
+                rows={rows.map((row) => ({
+                  ...row,
+                  earnings: `$${row.earnings.toFixed(2)}`,
+                }))}
+              />
+            </div>
+          </Card>
         </PageSection>
       </PageContainer>
     </DashboardLayout>

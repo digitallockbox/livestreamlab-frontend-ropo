@@ -151,20 +151,93 @@ export const getAutoSplitResponse = async (): Promise<AutoSplitResponse> => {
 export const getAffiliateResponse = async (): Promise<AffiliateResponse> => {
     const productId = await trackClick('product-001');
     const conversionId = await trackConversion('order-001');
-    const earnings = estimateRevenue(42, 0.8);
+
+    const catalog = [
+        {
+            id: 'product-001',
+            name: 'Creator Bundle',
+            category: 'Digital Pack',
+            price: 49,
+            commissionRate: 0.2,
+            rating: 4.8,
+        },
+        {
+            id: 'product-002',
+            name: 'Studio Lighting Kit',
+            category: 'Hardware',
+            price: 129,
+            commissionRate: 0.15,
+            rating: 4.6,
+        },
+        {
+            id: 'product-003',
+            name: 'Audience Growth Course',
+            category: 'Education',
+            price: 89,
+            commissionRate: 0.22,
+            rating: 4.9,
+        },
+    ];
+
+    const links = [
+        {
+            id: conversionId,
+            productId,
+            productName: 'Creator Bundle',
+            shortUrl: 'https://livestreamlab.live/a/creator-bundle',
+            clicks: 42,
+            conversions: 12,
+            earnings: estimateRevenue(42, 0.8),
+        },
+        {
+            id: 'conv-002',
+            productId: 'product-002',
+            productName: 'Studio Lighting Kit',
+            shortUrl: 'https://livestreamlab.live/a/studio-lighting-kit',
+            clicks: 36,
+            conversions: 8,
+            earnings: estimateRevenue(36, 1.35),
+        },
+        {
+            id: 'conv-003',
+            productId: 'product-003',
+            productName: 'Audience Growth Course',
+            shortUrl: 'https://livestreamlab.live/a/audience-growth-course',
+            clicks: 50,
+            conversions: 16,
+            earnings: estimateRevenue(50, 1.65),
+        },
+    ];
+
+    const topProducts = links.map((link) => ({
+        productId: link.productId,
+        productName: link.productName,
+        conversionRate: link.clicks > 0 ? Number(((link.conversions / link.clicks) * 100).toFixed(2)) : 0,
+        earnings: link.earnings,
+    })).sort((left, right) => right.earnings - left.earnings);
+
+    const conversionTrend = [
+        { label: 'D-6', conversions: 4, earnings: 38 },
+        { label: 'D-5', conversions: 6, earnings: 52 },
+        { label: 'D-4', conversions: 7, earnings: 69 },
+        { label: 'D-3', conversions: 8, earnings: 76 },
+        { label: 'D-2', conversions: 9, earnings: 94 },
+        { label: 'D-1', conversions: 11, earnings: 108 },
+        { label: 'Today', conversions: 14, earnings: 132 },
+    ];
+
+    const generatorBaseUrl = 'https://livestreamlab.live/a';
 
     return {
-        links: [
-            {
-                id: conversionId,
-                productId,
-                productName: 'Creator Bundle',
-                shortUrl: 'https://livestreamlab.live/a/creator-bundle',
-                clicks: 42,
-                conversions: 12,
-                earnings,
-            },
-        ],
+        links,
+        catalog,
+        topProducts,
+        conversionTrend,
+        generator: {
+            baseUrl: generatorBaseUrl,
+            defaultCampaign: 'creator-launch',
+            lastGeneratedUrl: `${generatorBaseUrl}/creator-bundle?campaign=creator-launch`,
+        },
     };
 };
 

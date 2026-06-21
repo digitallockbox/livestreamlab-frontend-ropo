@@ -174,6 +174,30 @@ export type AffiliateResponse = {
         conversions: number;
         earnings: number;
     }>;
+    catalog: Array<{
+        id: string;
+        name: string;
+        category: string;
+        price: number;
+        commissionRate: number;
+        rating: number;
+    }>;
+    topProducts: Array<{
+        productId: string;
+        productName: string;
+        conversionRate: number;
+        earnings: number;
+    }>;
+    conversionTrend: Array<{
+        label: string;
+        conversions: number;
+        earnings: number;
+    }>;
+    generator: {
+        baseUrl: string;
+        defaultCampaign: string;
+        lastGeneratedUrl: string;
+    };
 };
 
 export type IntegrationsResponse = {
