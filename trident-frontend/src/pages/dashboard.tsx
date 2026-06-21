@@ -4,6 +4,7 @@ import {
   PageHeader,
   PageSection,
 } from "../components/layout";
+import { useEffect } from "react";
 import { useApiData } from "../hooks/useApiData";
 import { dashboardApi } from "../utils/dashboardApi";
 import {
@@ -48,6 +49,33 @@ export default function DashboardHome(): JSX.Element {
     },
     "Could not load dashboard",
   );
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+      const cmdKey = isMac ? event.metaKey : event.ctrlKey;
+
+      if (cmdKey && event.key === "s") {
+        event.preventDefault();
+        window.location.href = "/streams";
+      }
+      if (cmdKey && event.key === "u") {
+        event.preventDefault();
+        window.location.href = "/content";
+      }
+      if (cmdKey && event.key === "e") {
+        event.preventDefault();
+        window.location.href = "/earnings";
+      }
+      if (cmdKey && event.key === "r") {
+        event.preventDefault();
+        void reload();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [reload]);
 
   if (isLoading) {
     return (
@@ -151,6 +179,7 @@ export default function DashboardHome(): JSX.Element {
                 key={action.label}
                 href={action.href}
                 className="quick-action-link"
+                aria-label={action.label}
               >
                 {action.label}
               </a>

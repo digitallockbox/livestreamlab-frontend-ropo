@@ -6,6 +6,7 @@ type InputProps = {
   className?: string;
   type?: "text" | "email" | "password" | "number";
   onChange?: (value: string) => void;
+  ariaLabel?: string;
 };
 
 export function Input({
@@ -14,6 +15,7 @@ export function Input({
   className,
   type = "text",
   onChange,
+  ariaLabel,
 }: InputProps): JSX.Element {
   const classes = className
     ? `${inputStyles.input} ${className}`
@@ -25,6 +27,7 @@ export function Input({
       type={type}
       value={value}
       placeholder={placeholder}
+      aria-label={ariaLabel}
       onChange={(event: { target: { value: string } }) =>
         onChange?.(event.target.value)
       }

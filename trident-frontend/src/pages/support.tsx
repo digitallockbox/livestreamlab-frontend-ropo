@@ -176,17 +176,21 @@ export default function SupportPage(): JSX.Element {
               onSubmit={(event: { preventDefault: () => void }) =>
                 void handleSubmit(event)
               }
+              noValidate
             >
               <div className="support-form-grid">
                 <Input
                   value={name}
                   onChange={setName}
                   placeholder="Your name"
+                  ariaLabel="Full name (required)"
                 />
                 <Input
+                  type="email"
                   value={email}
                   onChange={setEmail}
                   placeholder="you@creator.com"
+                  ariaLabel="Email address (required)"
                 />
               </div>
               <div className="support-form-grid">
@@ -207,6 +211,7 @@ export default function SupportPage(): JSX.Element {
                 value={message}
                 onChange={setMessage}
                 placeholder="Add additional context, steps, and impact details."
+                ariaLabel="Issue description (required)"
               />
               <div className="support-upload">
                 Attachment UI placeholder: logs, screenshots, clips.

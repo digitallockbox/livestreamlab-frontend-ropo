@@ -30,8 +30,11 @@ export function LiveIndicator({ url }: LiveIndicatorProps): JSX.Element {
   return (
     <span
       className={`live-indicator ${connected ? "live-indicator-on" : "live-indicator-off"}`}
+      role="status"
+      aria-live="polite"
+      aria-label={connected ? "Live connection active" : "Connection offline"}
     >
-      <span className="live-indicator-dot" />
+      <span className={`live-indicator-dot ${connected ? "pulse" : ""}`} />
       {connected ? "Live connection" : "Offline"}
     </span>
   );

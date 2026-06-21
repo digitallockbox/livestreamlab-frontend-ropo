@@ -5,6 +5,7 @@ type TextareaProps = {
   placeholder?: string;
   className?: string;
   onChange?: (value: string) => void;
+  ariaLabel?: string;
 };
 
 export function Textarea({
@@ -12,6 +13,7 @@ export function Textarea({
   placeholder,
   className,
   onChange,
+  ariaLabel,
 }: TextareaProps): JSX.Element {
   const classes = className
     ? `${textareaStyles.textarea} ${className}`
@@ -22,6 +24,7 @@ export function Textarea({
       className={classes}
       value={value}
       placeholder={placeholder}
+      aria-label={ariaLabel}
       onChange={(event: { target: { value: string } }) =>
         onChange?.(event.target.value)
       }
