@@ -10,4 +10,12 @@ export declare const PLATFORM_ORIGINS: {
 };
 export declare const API_ENDPOINTS: {
     readonly health: "/health";
+    readonly analytics: "/api/analytics";
+    readonly streams: "/api/streams";
+    readonly earnings: "/api/earnings";
+    readonly autosplit: "/api/autosplit";
+    readonly content: "/api/content";
+    readonly affiliate: "/api/affiliate";
+    readonly integrations: "/api/integrations";
+    readonly settings: "/api/settings";
 };

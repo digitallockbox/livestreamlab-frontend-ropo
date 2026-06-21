@@ -1,1 +1,2 @@
-export declare const contentRoutes: never[];
+import type { ContentResponse } from '@livestreamlab/shared/types/DashboardApi';
+export declare const getContentResponse: () => Promise<ContentResponse>;

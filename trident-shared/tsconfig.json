@@ -2,9 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "composite": true,
+    "moduleResolution": "Bundler",
     "outDir": "dist",
     "rootDir": "src",
-    "moduleResolution": "Node",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },

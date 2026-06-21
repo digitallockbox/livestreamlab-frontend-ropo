@@ -10,4 +10,12 @@ export const PLATFORM_ORIGINS = {
 };
 export const API_ENDPOINTS = {
     health: '/health',
+    analytics: '/api/analytics',
+    streams: '/api/streams',
+    earnings: '/api/earnings',
+    autosplit: '/api/autosplit',
+    content: '/api/content',
+    affiliate: '/api/affiliate',
+    integrations: '/api/integrations',
+    settings: '/api/settings',
 };

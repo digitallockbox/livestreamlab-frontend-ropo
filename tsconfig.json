@@ -19,14 +19,13 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
     "paths": {
-      "@livestreamlab/shared/*": ["trident-shared/src/*"],
-      "@livestreamlab/engines/*": ["trident-engines-internal/src/*"],
-      "@livestreamlab/core/*": ["trident-core-internal/src/*"],
-      "@livestreamlab/services/*": ["livestreamlab-services/src/*"],
-      "@livestreamlab/backend/*": ["trident-backend-shell/src/*"],
-      "@livestreamlab/frontend/*": ["trident-frontend/src/*"]
+      "@livestreamlab/shared/*": ["./trident-shared/src/*"],
+      "@livestreamlab/engines/*": ["./trident-engines-internal/src/*"],
+      "@livestreamlab/core/*": ["./trident-core-internal/src/*"],
+      "@livestreamlab/services/*": ["./livestreamlab-services/src/*"],
+      "@livestreamlab/backend/*": ["./trident-backend-shell/src/*"],
+      "@livestreamlab/frontend/*": ["./trident-frontend/src/*"]
     }
   }
 }
