@@ -5,16 +5,28 @@ import type {
     ContentResponse,
     EarningsResponse,
     IntegrationsResponse,
+    PhantomCheckoutRequest,
+    PhantomCheckoutResponse,
+    PhantomConnectRequest,
+    PhantomConnectResponse,
+    PhantomLinkRequest,
+    PhantomLinkResponse,
+    PhantomVerifyRequest,
+    PhantomVerifyResponse,
     SettingsResponse,
     StreamsResponse,
 } from '@livestreamlab/shared/types/DashboardApi';
-import { DASHBOARD_ENDPOINTS, resolveApiRoute } from '@livestreamlab/backend/server';
+import {
+    DASHBOARD_ENDPOINTS,
+    PHANTOM_ENDPOINTS,
+    resolveApiRoute,
+} from '@livestreamlab/backend/server';
 
 const API_BASE_URL = 'https://api.livestreamlab.live:8080';
 
-async function fetchJson<T>(path: string): Promise<T> {
+async function fetchJson<T>(path: string, requestInit?: RequestInit, payload?: unknown): Promise<T> {
     try {
-        const response = await fetch(`${API_BASE_URL}${path}`);
+        const response = await fetch(`${API_BASE_URL}${path}`, requestInit);
         if (response.ok) {
             return (await response.json()) as T;
         }
@@ -22,7 +34,7 @@ async function fetchJson<T>(path: string): Promise<T> {
         // Fall through to in-workspace resolver used by local previews.
     }
 
-    return resolveApiRoute<T>(path);
+    return resolveApiRoute<T>(path, payload);
 }
 
 export const dashboardApi = {
@@ -42,4 +54,48 @@ export const dashboardApi = {
         fetchJson<IntegrationsResponse>(DASHBOARD_ENDPOINTS.integrations),
     getSettings: (): Promise<SettingsResponse> =>
         fetchJson<SettingsResponse>(DASHBOARD_ENDPOINTS.settings),
+    phantomConnect: (
+        payload: PhantomConnectRequest,
+    ): Promise<PhantomConnectResponse> =>
+        fetchJson<PhantomConnectResponse>(
+            PHANTOM_ENDPOINTS.connect,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    phantomVerify: (payload: PhantomVerifyRequest): Promise<PhantomVerifyResponse> =>
+        fetchJson<PhantomVerifyResponse>(
+            PHANTOM_ENDPOINTS.verify,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    phantomLink: (payload: PhantomLinkRequest): Promise<PhantomLinkResponse> =>
+        fetchJson<PhantomLinkResponse>(
+            PHANTOM_ENDPOINTS.link,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
+    phantomCheckout: (
+        payload: PhantomCheckoutRequest,
+    ): Promise<PhantomCheckoutResponse> =>
+        fetchJson<PhantomCheckoutResponse>(
+            PHANTOM_ENDPOINTS.checkout,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(payload),
+            },
+            payload,
+        ),
 };

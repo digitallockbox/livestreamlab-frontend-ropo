@@ -5,9 +5,18 @@
   ContentResponse,
   EarningsResponse,
   IntegrationsResponse,
+  PhantomCheckoutRequest,
+  PhantomCheckoutResponse,
+  PhantomConnectRequest,
+  PhantomConnectResponse,
+  PhantomLinkRequest,
+  PhantomLinkResponse,
+  PhantomVerifyRequest,
+  PhantomVerifyResponse,
   SettingsResponse,
   StreamsResponse,
 } from '@livestreamlab/shared/types/DashboardApi';
+import { getPhantomVerifyResponse } from './routes/auth.routes';
 import { getAnalyticsResponse } from './routes/analytics.routes';
 import { getContentResponse } from './routes/content.routes';
 import { getEarningsResponse } from './routes/earnings.routes';
@@ -17,6 +26,11 @@ import {
 } from './routes/identity.routes';
 import { getAffiliateResponse, getAutoSplitResponse } from './routes/store.routes';
 import { getStreamsResponse } from './routes/stream.routes';
+import {
+  getPhantomCheckoutResponse,
+  getPhantomConnectResponse,
+  getPhantomLinkResponse,
+} from './routes/wallet.routes';
 
 export const DASHBOARD_ENDPOINTS = {
   analytics: '/api/analytics',
@@ -29,6 +43,13 @@ export const DASHBOARD_ENDPOINTS = {
   settings: '/api/settings',
 } as const;
 
+export const PHANTOM_ENDPOINTS = {
+  connect: '/wallet/phantom/connect',
+  verify: '/wallet/phantom/verify',
+  link: '/wallet/phantom/link',
+  checkout: '/wallet/phantom/checkout',
+} as const;
+
 type DashboardResponseMap = {
   [DASHBOARD_ENDPOINTS.analytics]: AnalyticsResponse;
   [DASHBOARD_ENDPOINTS.streams]: StreamsResponse;
@@ -38,6 +59,20 @@ type DashboardResponseMap = {
   [DASHBOARD_ENDPOINTS.affiliate]: AffiliateResponse;
   [DASHBOARD_ENDPOINTS.integrations]: IntegrationsResponse;
   [DASHBOARD_ENDPOINTS.settings]: SettingsResponse;
+};
+
+type PhantomPayloadMap = {
+  [PHANTOM_ENDPOINTS.connect]: PhantomConnectRequest;
+  [PHANTOM_ENDPOINTS.verify]: PhantomVerifyRequest;
+  [PHANTOM_ENDPOINTS.link]: PhantomLinkRequest;
+  [PHANTOM_ENDPOINTS.checkout]: PhantomCheckoutRequest;
+};
+
+type PhantomResponseMap = {
+  [PHANTOM_ENDPOINTS.connect]: PhantomConnectResponse;
+  [PHANTOM_ENDPOINTS.verify]: PhantomVerifyResponse;
+  [PHANTOM_ENDPOINTS.link]: PhantomLinkResponse;
+  [PHANTOM_ENDPOINTS.checkout]: PhantomCheckoutResponse;
 };
 
 const dashboardResolvers: {
@@ -53,15 +88,36 @@ const dashboardResolvers: {
   [DASHBOARD_ENDPOINTS.settings]: getSettingsResponse,
 };
 
-export const resolveApiRoute = async <T>(path: string): Promise<T> => {
-  const resolver = (dashboardResolvers as Record<string, () => Promise<unknown>>)[path];
-  if (!resolver) {
+const phantomResolvers: {
+  [Path in keyof PhantomResponseMap]: (
+    payload?: PhantomPayloadMap[Path],
+  ) => Promise<PhantomResponseMap[Path]>;
+} = {
+  [PHANTOM_ENDPOINTS.connect]: getPhantomConnectResponse,
+  [PHANTOM_ENDPOINTS.verify]: getPhantomVerifyResponse,
+  [PHANTOM_ENDPOINTS.link]: getPhantomLinkResponse,
+  [PHANTOM_ENDPOINTS.checkout]: getPhantomCheckoutResponse,
+};
+
+export const resolveApiRoute = async <T>(path: string, payload?: unknown): Promise<T> => {
+  const dashboardResolver = (dashboardResolvers as Record<string, () => Promise<unknown>>)[path];
+  if (dashboardResolver) {
+    return (await dashboardResolver()) as T;
+  }
+
+  const phantomResolver = (
+    phantomResolvers as Record<string, (request?: unknown) => Promise<unknown>>
+  )[path];
+
+  if (!phantomResolver) {
     throw new Error(`Unknown API route: ${path}`);
   }
 
-  return (await resolver()) as T;
+  return (await phantomResolver(payload)) as T;
 };
 
 export const startServer = (): string => {
-  return `livestreamlab.live backend routes ready (${Object.keys(dashboardResolvers).length} endpoints)`;
+  const endpointCount =
+    Object.keys(dashboardResolvers).length + Object.keys(phantomResolvers).length;
+  return `livestreamlab.live backend routes ready (${endpointCount} endpoints)`;
 };

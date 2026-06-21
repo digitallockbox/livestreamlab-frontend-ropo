@@ -304,3 +304,50 @@ export type SettingsResponse = {
         }>;
     };
 };
+export type PhantomConnectRequest = {
+    publicKey: string;
+};
+export type PhantomConnectResponse = {
+    walletAddress: string;
+    challenge: string;
+    nonce: string;
+    expiresAt: string;
+};
+export type PhantomVerifyRequest = {
+    publicKey: string;
+    signature: string;
+    challenge: string;
+};
+export type PhantomVerifyResponse = {
+    verified: boolean;
+    sessionToken: string;
+    userId: string;
+    walletAddress: string;
+    roles: Array<'creator' | 'viewer' | 'admin'>;
+};
+export type PhantomLinkRequest = {
+    sessionToken: string;
+    role: 'creator' | 'viewer' | 'admin';
+};
+export type PhantomLinkResponse = {
+    linked: boolean;
+    walletAddress: string;
+    role: 'creator' | 'viewer' | 'admin';
+    linkedAt: string;
+};
+export type PhantomCheckoutRequest = {
+    sessionToken: string;
+    orderId: string;
+    amount: number;
+    currency: 'USDC' | 'STREAMING';
+};
+export type PhantomCheckoutResponse = {
+    accepted: boolean;
+    walletAddress: string;
+    orderId: string;
+    amount: number;
+    currency: 'USDC' | 'STREAMING';
+    transactionSignature: string;
+    receiptId: string;
+    confirmedAt: string;
+};

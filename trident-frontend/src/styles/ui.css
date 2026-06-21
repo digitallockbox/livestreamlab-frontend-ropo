@@ -18,6 +18,42 @@
   gap: 10px;
 }
 
+.web3-wall {
+  width: min(980px, calc(100vw - 2rem));
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: linear-gradient(160deg, #0f1b2d, #0a111a 65%);
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.web3-kicker {
+  margin: 0;
+  color: #86efac;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.web3-input-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+.web3-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.web3-modal-grid {
+  display: grid;
+  gap: 0.55rem;
+}
+
 .home-title {
   margin: 0;
   font-size: 2.625rem;
@@ -473,6 +509,11 @@
 
   .content-scheduler-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .web3-input-row {
+    grid-template-columns: 1fr auto;
+    align-items: center;
   }
 }
 
