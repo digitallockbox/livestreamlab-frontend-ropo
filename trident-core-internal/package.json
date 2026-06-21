@@ -1,0 +1,13 @@
+﻿{
+  "name": "livestreamlab-core-internal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo dev placeholder",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "echo test placeholder"
+  }
+}

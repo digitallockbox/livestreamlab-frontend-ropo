@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../trident-core-internal" },
+    { "path": "../trident-engines-internal" },
+    { "path": "../trident-shared" }
+  ]
+}

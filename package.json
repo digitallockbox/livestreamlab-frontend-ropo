@@ -1,0 +1,22 @@
+﻿{
+  "name": "livestreamlab",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "trident-backend-shell",
+    "trident-core-internal",
+    "trident-engines-internal",
+    "trident-frontend",
+    "trident-shared",
+    "livestreamlab-services"
+  ],
+  "scripts": {
+    "build": "npm run --workspaces build",
+    "typecheck": "npm run --workspaces typecheck",
+    "dev": "npm run --workspaces dev",
+    "test": "npm run --workspaces test"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,1 @@
+export const STREAMING_TOKEN_SYMBOL = 'TRIDENT';

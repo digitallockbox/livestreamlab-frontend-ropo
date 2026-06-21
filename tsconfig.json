@@ -1,0 +1,32 @@
+﻿{
+  "files": [],
+  "references": [
+    { "path": "./trident-frontend" },
+    { "path": "./trident-backend-shell" },
+    { "path": "./trident-shared" },
+    { "path": "./trident-engines-internal" },
+    { "path": "./trident-core-internal" },
+    { "path": "./livestreamlab-services" }
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@livestreamlab/shared/*": ["trident-shared/src/*"],
+      "@livestreamlab/engines/*": ["trident-engines-internal/src/*"],
+      "@livestreamlab/core/*": ["trident-core-internal/src/*"],
+      "@livestreamlab/services/*": ["livestreamlab-services/src/*"],
+      "@livestreamlab/backend/*": ["trident-backend-shell/src/*"],
+      "@livestreamlab/frontend/*": ["trident-frontend/src/*"]
+    }
+  }
+}

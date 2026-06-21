@@ -1,0 +1,2 @@
+﻿export const logInfo = (message: string): void => { console.log(message); };
+
