@@ -150,7 +150,41 @@ export type ContentResponse = {
         createdAt: string;
         sizeBytes: number;
         url: string;
+        status: 'draft' | 'processing' | 'ready' | 'scheduled';
+        durationSeconds?: number;
+        tags: string[];
     }>;
+    scheduler: {
+        timezone: string;
+        nextPublishAt: string;
+        queuedPosts: number;
+        scheduledThisWeek: number;
+        publishWindows: Array<{
+            id: string;
+            label: string;
+            day: 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+            startHourUtc: number;
+            durationHours: number;
+            platform: 'youtube' | 'twitch' | 'instagram' | 'tiktok';
+            goal: 'reach' | 'engagement' | 'conversion';
+        }>;
+        queue: Array<{
+            id: string;
+            title: string;
+            assetId: string;
+            platform: 'youtube' | 'twitch' | 'instagram' | 'tiktok';
+            campaign: string;
+            status: 'draft' | 'scheduled' | 'published' | 'failed';
+            scheduledFor: string;
+            estimatedReach: number;
+        }>;
+        campaignPerformance: Array<{
+            campaign: string;
+            scheduledPosts: number;
+            publishedPosts: number;
+            engagementRate: number;
+        }>;
+    };
 };
 export type AffiliateResponse = {
     links: Array<{

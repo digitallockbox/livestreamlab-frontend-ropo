@@ -2,6 +2,7 @@ import { uploadContent } from '@livestreamlab/core/content/upload';
 export const getContentResponse = async () => {
     const fileName = await uploadContent('highlight.mp4');
     const createdAt = new Date().toISOString();
+    const oneHourMs = 60 * 60 * 1000;
     return {
         assets: [
             {
@@ -11,7 +12,128 @@ export const getContentResponse = async () => {
                 createdAt,
                 sizeBytes: 10485760,
                 url: `https://cdn.livestreamlab.live:8080/${fileName}`,
+                status: 'ready',
+                durationSeconds: 214,
+                tags: ['launch', 'highlight', 'affiliate'],
+            },
+            {
+                id: 'asset-002',
+                fileName: 'creator-teaser-cut.mp4',
+                mediaType: 'video',
+                createdAt: new Date(Date.now() - oneHourMs * 14).toISOString(),
+                sizeBytes: 5291043,
+                url: 'https://cdn.livestreamlab.live:8080/creator-teaser-cut.mp4',
+                status: 'scheduled',
+                durationSeconds: 43,
+                tags: ['teaser', 'shorts'],
+            },
+            {
+                id: 'asset-003',
+                fileName: 'new-drop-product-banner.png',
+                mediaType: 'image',
+                createdAt: new Date(Date.now() - oneHourMs * 34).toISOString(),
+                sizeBytes: 831224,
+                url: 'https://cdn.livestreamlab.live:8080/new-drop-product-banner.png',
+                status: 'ready',
+                tags: ['banner', 'store', 'product-drop'],
             },
         ],
+        scheduler: {
+            timezone: 'UTC',
+            nextPublishAt: new Date(Date.now() + oneHourMs * 5).toISOString(),
+            queuedPosts: 5,
+            scheduledThisWeek: 11,
+            publishWindows: [
+                {
+                    id: 'window-001',
+                    label: 'Prime Clip Drop',
+                    day: 'Tue',
+                    startHourUtc: 18,
+                    durationHours: 2,
+                    platform: 'youtube',
+                    goal: 'reach',
+                },
+                {
+                    id: 'window-002',
+                    label: 'Live Momentum Push',
+                    day: 'Thu',
+                    startHourUtc: 20,
+                    durationHours: 3,
+                    platform: 'twitch',
+                    goal: 'engagement',
+                },
+                {
+                    id: 'window-003',
+                    label: 'Store Conversion Burst',
+                    day: 'Sat',
+                    startHourUtc: 16,
+                    durationHours: 2,
+                    platform: 'instagram',
+                    goal: 'conversion',
+                },
+            ],
+            queue: [
+                {
+                    id: 'queue-001',
+                    title: 'Weekly Highlight Reel',
+                    assetId: 'asset-001',
+                    platform: 'youtube',
+                    campaign: 'june-highlight-wave',
+                    status: 'scheduled',
+                    scheduledFor: new Date(Date.now() + oneHourMs * 5).toISOString(),
+                    estimatedReach: 14200,
+                },
+                {
+                    id: 'queue-002',
+                    title: 'Creator Teaser Vertical',
+                    assetId: 'asset-002',
+                    platform: 'tiktok',
+                    campaign: 'teaser-drip',
+                    status: 'draft',
+                    scheduledFor: new Date(Date.now() + oneHourMs * 26).toISOString(),
+                    estimatedReach: 8900,
+                },
+                {
+                    id: 'queue-003',
+                    title: 'Product Drop Banner Blast',
+                    assetId: 'asset-003',
+                    platform: 'instagram',
+                    campaign: 'store-flash-drop',
+                    status: 'scheduled',
+                    scheduledFor: new Date(Date.now() + oneHourMs * 31).toISOString(),
+                    estimatedReach: 7600,
+                },
+                {
+                    id: 'queue-004',
+                    title: 'Live Room Countdown Card',
+                    assetId: 'asset-003',
+                    platform: 'twitch',
+                    campaign: 'live-countdown',
+                    status: 'published',
+                    scheduledFor: new Date(Date.now() - oneHourMs * 8).toISOString(),
+                    estimatedReach: 4200,
+                },
+            ],
+            campaignPerformance: [
+                {
+                    campaign: 'june-highlight-wave',
+                    scheduledPosts: 4,
+                    publishedPosts: 3,
+                    engagementRate: 8.4,
+                },
+                {
+                    campaign: 'store-flash-drop',
+                    scheduledPosts: 3,
+                    publishedPosts: 2,
+                    engagementRate: 6.9,
+                },
+                {
+                    campaign: 'teaser-drip',
+                    scheduledPosts: 4,
+                    publishedPosts: 1,
+                    engagementRate: 9.1,
+                },
+            ],
+        },
     };
 };
